@@ -10,7 +10,19 @@ import json
 import timeit
 
 
+def _ensure_output_dirs(params):
+    """Create parent directories for output paths in the config if they don't exist yet."""
+    for key in ('logging_path', 'res_path', 'plot_path', 'model_save_path'):
+        value = params.get(key)
+        if not value:
+            continue
+        directory = value if value.endswith(('/', '\\')) else os.path.dirname(value)
+        if directory:
+            os.makedirs(directory, exist_ok=True)
+
+
 def exp_centralized(params):
+    _ensure_output_dirs(params)
     logging.basicConfig(filename=params['logging_path'], filemode='w', level=logging.INFO)
     log = logging.getLogger('main')
     folder_path = params['folder_path']
@@ -64,6 +76,7 @@ def exp_centralized(params):
 
 
 def exp_centralized_for(params):
+    _ensure_output_dirs(params)
     logging.basicConfig(filename=params['logging_path'], filemode='w', level=logging.INFO)
     log = logging.getLogger('main')
     folder_path = params['folder_path']
@@ -101,6 +114,7 @@ def exp_centralized_for(params):
 
 
 def exp_centralized_watermark(params):
+    _ensure_output_dirs(params)
     logging.basicConfig(filename=params['logging_path'], filemode='w', level=logging.INFO)
     log = logging.getLogger('main')
     folder_path = params['folder_path']
@@ -163,6 +177,7 @@ def exp_centralized_for_multi(proc_id, devices, params):
     print("start to train")
 
 
+    _ensure_output_dirs(params)
     logging.basicConfig(filename=params['logging_path'], filemode='w', level=logging.INFO)
     log = logging.getLogger('main')
     folder_path = params['folder_path']
@@ -230,6 +245,7 @@ def exp_centralized_for_multi_gpu(proc_id, devices, params):
     print("start to train")
 
 
+    _ensure_output_dirs(params)
     logging.basicConfig(filename=params['logging_path'], filemode='w', level=logging.INFO)
     log = logging.getLogger('main')
     folder_path = params['folder_path']
