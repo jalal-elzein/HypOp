@@ -1,0 +1,51 @@
+{
+    "data": "uf",
+    "mode": "sat",
+
+
+    "hyper": false,
+    "GD": false,
+    "transfer": false,
+    "initial_transfer": false,
+    "K": 5,
+
+
+    "logging_path": "my_output/logs/sat_uf_250.log",
+    "res_path": "my_output/results/sat_uf_250.hdf5",
+    "folder_path": "./data/sat_data/uf250-test_1/",
+    "plot_path": "my_output/results/plots/",
+    "model_save_path": "my_output/models/sat/",
+    "model_load_path": "my_output/models/sat/",
+
+
+    "lr": 3e-2, 
+    "epoch": 3e2, 
+    "dropout": 0,
+
+
+    "random_init": "none",
+    "Att": false,
+    "f_input": false,
+    "f": 50,
+    "tol": 1e-4,
+    "mapping": "distribution",
+    "boosting_mapping": 1,
+    "N_realize": 2,
+    "Niter_h": 120,
+    "t": 0.5,
+    "penalty": 0,
+    "patience": 50,
+    "sparsify": false,
+    "sparsify_p": 0.8,
+    "penalty_inc": false,
+    "penalty_c": 1e-5,
+    "n_partitions": 4,
+    "sparcify": false,
+    "sparcify_p": 0.8,
+    "coarsen": true,
+
+
+    "multi_gpu": 0,
+    "num_gpus": 1,
+    "test_multi_gpu": 0
+}

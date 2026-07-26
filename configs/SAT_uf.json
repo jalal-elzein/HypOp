@@ -16,8 +16,7 @@
     "sparcify": false,
     "sparcify_p": 0.8,
     "coarsen": false,
-    "sparcify": false,
-    "sparcify_p": 0.8,
+
 
     "lr": 3e-2,
     "epoch": 3e2,

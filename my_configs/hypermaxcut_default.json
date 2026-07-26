@@ -1,0 +1,47 @@
+{
+    "data": "hypergraph",
+    "mode": "maxcut",
+
+
+    "hyper": true,
+    "GD": false,
+    "transfer": false,
+    "initial_transfer": false,
+    "K": 1,
+
+
+    "logging_path": "my_output/logs/hypermaxcut_syn_nn.log",
+    "res_path": "my_output/results/hypermaxcut_syn_nn.hdf5",
+    "folder_path": "./data/hypergraph_data/synthetic/new/single/",
+    "plot_path": "my_output/results/plots/hist_maxcut/",
+    "model_save_path": "my_output/models/hypermaxcut/",
+    "model_load_path": "my_output/models/hypermaxcut/",
+
+
+    "lr": 1e-2, 
+    "epoch": 1e2, 
+    "dropout": 0,
+
+
+    "random_init": "none",
+    "Att": false,
+    "f_input": false,
+    "f": 70,
+    "tol": 1e-4,
+    "mapping": "distribution",
+    "boosting_mapping": 1,
+    "N_realize": 1,
+    "Niter_h": 30,
+    "t": 0.3,
+    "penalty": 0,
+    "patience": 50,
+
+    "load_best_out": false,
+    "penalty_inc": false,
+    "penalty_c": 1e-5,
+
+
+    "multi_gpu": 0,
+    "num_gpus": 1,
+    "test_multi_gpu": 0
+}
