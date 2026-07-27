@@ -19,7 +19,7 @@
 
 
     "lr": 0.001, 
-    "epoch": 10, 
+    "epoch": 100, 
     "dropout": 0,
 
 
@@ -30,8 +30,8 @@
     "tol": 1e-3,
     "mapping": "distribution",
     "boosting_mapping": 1,
-    "N_realize": 1,
-    "Niter_h": 30,
+    "N_realize": 3,
+    "Niter_h": 100,
     "t": 0.3,
     "penalty": 0,
     "patience": 50,
@@ -44,7 +44,7 @@
     "n_partitions": 4,
     "sparcify": false,
     "sparcify_p": 0.8,
-    "coarsen": true,
+    "coarsen": false,
     
     
     "multi_gpu": 0,

@@ -278,8 +278,6 @@ def mapping_distribution(best_outs, params, n, info, weights, constraints, all_w
 
     for rea in range(params['N_realize']):
         res = {x: np.random.choice(range(2), p=_binary_probs(best_outs[x])) for x in best_outs.keys()}
-        best_score = _loss(res, constraints, all_weights, hyper=hyper)
-        best_res = copy.deepcopy(res)
         # ord = random.sample(range(1, n + 1), n)
         t = params['t']
         # l1=best_score
