@@ -8,6 +8,7 @@
     "GD": false,
     "Att": false,
     "dropout": 0,
+    "coarsen": false,
     "f_input": false,
     "f": 70,
     "penalty_inc": false,

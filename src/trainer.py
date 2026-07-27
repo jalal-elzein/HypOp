@@ -7,6 +7,8 @@ from src.loss import loss_cal_and_update, maxcut_loss_func_helper, loss_maxcut_w
 from src.utils import mapping_algo, mapping_distribution, gen_q_mis,gen_q_maxcut, mapping_distribution_QUBO, get_normalized_G_from_con, mapping_distribution_vec_task, mapping_distribution_vec, all_to_weights, all_to_weights_task
 import numpy as np
 import multiprocessing as mp
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import random
@@ -1618,7 +1620,7 @@ def centralized_train_coarsen(G, params, f, C, org_constraints, graph_dict, n_or
 
     
 
-    if params["load best out"]:
+    if params["load_best_out"]:
         with open("best_out.txt", "r") as f:
             best_out = eval(f.read())
     else:

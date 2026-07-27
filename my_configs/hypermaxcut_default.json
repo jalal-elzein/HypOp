@@ -7,6 +7,7 @@
     "GD": false,
     "transfer": false,
     "initial_transfer": false,
+    "coarsen": false,
     "K": 1,
 
 

@@ -29,6 +29,7 @@
     "f": 50,
     "tol": 1e-3,
     "mapping": "distribution",
+    "boosting_mapping": 1,
     "N_realize": 1,
     "Niter_h": 30,
     "t": 0.3,

@@ -245,6 +245,16 @@ def mapping_algo(best_outs, weights, info, mode):
 #     return best_res
 
 
+def _binary_probs(p):
+    """Build a [1-p, p] probability pair as float64, clipped to [0, 1].
+
+    best_outs values come out of the GNN as float32, whose rounding error
+    can make [1-p, p] fail numpy's strict sum-to-1 check in random.choice.
+    """
+    p = float(min(max(p, 0.0), 1.0))
+    return [1.0 - p, p]
+
+
 def mapping_distribution(best_outs, params, n, info, weights, constraints, all_weights, inc, penalty, hyper):
     if params['random_init']=='one_half':
         best_outs= {x: 0.5 for x in best_outs.keys()}
@@ -267,7 +277,7 @@ def mapping_distribution(best_outs, params, n, info, weights, constraints, all_w
         _loss = loss_mincut_numpy
 
     for rea in range(params['N_realize']):
-        res = {x: np.random.choice(range(2), p=[1 - best_outs[x], best_outs[x]]) for x in best_outs.keys()}
+        res = {x: np.random.choice(range(2), p=_binary_probs(best_outs[x])) for x in best_outs.keys()}
         best_score = _loss(res, constraints, all_weights, hyper=hyper)
         best_res = copy.deepcopy(res)
         # ord = random.sample(range(1, n + 1), n)
@@ -328,7 +338,7 @@ def mapping_distribution_QUBO(best_outs, params, q_torch, n):
     lb = float('inf')
     _loss = loss_maxind_QUBO
     for rea in range(params['N_realize']):
-        res = {x: np.random.choice(range(2), p=[1 - best_outs[x], best_outs[x]]) for x in best_outs.keys()}
+        res = {x: np.random.choice(range(2), p=_binary_probs(best_outs[x])) for x in best_outs.keys()}
         ord = random.sample(range(1, n + 1), n)
         t = 0
         for it in range(params['Niter_h']):
@@ -368,7 +378,7 @@ def mapping_distribution_vec_task(best_outs, params, n, info, constraints, C_dic
         _loss = loss_task_numpy_vec
 
     for rea in range(params['N_realize']):
-        res = {x: [np.random.choice(range(2), p=[1 - best_outs[x][i], best_outs[x][i]]) for i in range(L)] for x in best_outs.keys()}
+        res = {x: [np.random.choice(range(2), p=_binary_probs(best_outs[x][i])) for i in range(L)] for x in best_outs.keys()}
         res_array = np.array(list(res.values()))
         # lbest = _loss(res, lenc, leninfo)
         lbest = _loss(res_array, lenc, leninfo)
