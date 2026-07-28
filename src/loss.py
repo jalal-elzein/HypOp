@@ -43,10 +43,10 @@ def loss_maxcut_weighted_coarse(probs, C, dct, weights, hyper=False):
     for c, w in zip(C, weights):
         temp_1s = 1
         temp_0s = 1
-        if hyper:#need changes if hyper
+        if hyper:
             for index in c:
-                temp_1s *= 1 - x[dct[index]]
-                temp_0s *= x[dct[index]]
+                temp_1s *= 1 - x[dct[index][0]-1][dct[index][1]]
+                temp_0s *= x[dct[index][0]-1][dct[index][1]]
         else:
             for index in c[0:2]:
                 temp_1s *= 1 - x[dct[index][0]-1][dct[index][1]]
