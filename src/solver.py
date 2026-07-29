@@ -121,6 +121,7 @@ def centralized_solver(constraints, header, params, file_name):
         else:
             H = generate_H_from_edges(edges, n)
             G = _generate_G_from_H(H)
+            os.makedirs("./models/G/", exist_ok=True)
             name_g="./models/G/"+params['mode']+'_'+file_name[:-4]+".npy"
             with open(name_g, 'wb') as ffff:
                 np.save(ffff,G)
@@ -772,6 +773,7 @@ def centralized_solver_watermark(constraints, watermark_cons, watermark_nodes, w
         else:
             H = generate_H_from_edges(edges, n)
             G = _generate_G_from_H(H)
+            os.makedirs("./models/G/", exist_ok=True)
             name_g = "./models/G/" + params['mode'] + '_' + file_name[:-4] + ".npy"
             with open(name_g, 'wb') as ffff:
                 np.save(ffff, G)
