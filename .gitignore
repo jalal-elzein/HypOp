@@ -2,3 +2,5 @@ log/*
 res/*
 models/*
 best_out.txt
+src/__pycache__
+wandb/

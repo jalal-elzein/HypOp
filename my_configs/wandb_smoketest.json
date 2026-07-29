@@ -1,0 +1,51 @@
+{
+    "data": "hypergraph",
+    "mode": "maxcut",
+
+    "hyper": true,
+    "GD": false,
+    "Att": false,
+    "transfer": false,
+    "initial_transfer": false,
+    "coarsen": false,
+    "K": 2,
+
+    "logging_path": "hpc_logs/wandb_smoketest.log",
+    "res_path": "hpc_logs/wandb_smoketest.hdf5",
+    "folder_path": "./data/hypergraph_data/synthetic/smoketest/",
+    "plot_path": "my_output/results/plots/wandb_smoketest/",
+    "model_save_path": "my_output/models/wandb_smoketest/",
+    "model_load_path": "my_output/models/wandb_smoketest/",
+
+    "lr": 1e-2,
+    "epoch": 5,
+    "dropout": 0,
+
+    "random_init": "none",
+    "f_input": false,
+    "f": 8,
+    "tol": 1e-4,
+    "mapping": "distribution",
+    "boosting_mapping": 1,
+    "N_realize": 1,
+    "Niter_h": 5,
+    "t": 0.3,
+    "penalty": 0,
+    "patience": 50,
+
+    "load_best_out": false,
+    "penalty_inc": false,
+    "penalty_c": 1e-5,
+
+    "sparcify": false,
+    "sparcify_p": 0.8,
+    "n_partitions": 4,
+
+    "multi_gpu": 0,
+    "num_gpus": 1,
+    "test_multi_gpu": 0,
+
+    "wandb_enabled": true,
+    "wandb_project": "hypergraph-csp-eval-smoketest",
+    "difficulty_param": "smoke"
+}

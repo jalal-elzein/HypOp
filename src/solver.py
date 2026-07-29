@@ -21,6 +21,7 @@ from src.data_reading import read_uf, read_stanford, read_hypergraph
 import logging
 from src.QUBO_utils import generate_graph, get_gnn, run_gnn_training, qubo_dict_to_torch, gen_combinations, loss_func
 from src.coarsen import coarsen1, coarsen2, coarsen3, coarsen4, coarsen5
+from src.wandb_logger import RunLogger, PROBLEM_TYPE_BY_MODE, compute_instance_id, quality_from_score
 
 
 
@@ -153,7 +154,22 @@ def centralized_solver(constraints, header, params, file_name):
     else:
         L = params['n_partitions']
 
+    ##### W&B tracking (wandb_tracking_spec.md): only wired up for the problem #####
+    ##### types covered by evaluation_protocol.md (MaxCut, MaxSAT). Opt-in via #####
+    ##### params['wandb_enabled'] so unrelated experiments are unaffected. #####
+    wandb_enabled = params.get('wandb_enabled', False)
+    wandb_problem_type = PROBLEM_TYPE_BY_MODE.get(params['mode'])
+    if wandb_enabled and wandb_problem_type is not None:
+        wandb_instance_id = compute_instance_id(params['folder_path'] + file_name)
+    else:
+        wandb_enabled = False
+
     for i in range(params['K']): ## if we want to solve the problem for K number of times ##
+
+        ##### seed this run so it's reproducible and can be logged as `seed` #####
+        random.seed(i)
+        np.random.seed(i)
+        torch.manual_seed(i)
 
         if params["mode"]=='task_vec': ## resource allocation problem ##
             if params['mode'] == 'task_vec':
@@ -230,6 +246,7 @@ def centralized_solver(constraints, header, params, file_name):
         if params['mode'] == 'sat':
             score, new_w = loss_sat_numpy_boost(res, constraints, [1 for i in range(len(constraints))], inc=params['boosting_mapping'])
             score_th, new_w = loss_sat_numpy_boost(res_th, constraints, [1 for i in range(len(constraints))],                                 inc=params['boosting_mapping'])
+            wandb_num_constraints = len(constraints)
 
         elif params['mode'] == 'maxcut' or params['mode'] == 'QUBO_maxcut' or params['mode'] == 'maxcut_annea':
             if params['data']=='bipartite' or params['data']=='cliquegraph':
@@ -237,9 +254,11 @@ def centralized_solver(constraints, header, params, file_name):
                                                        inc=params['boosting_mapping'])
                 score_th, _ = loss_maxcut_numpy_boost(res_th, constraints_hyper, [1 for i in range(len(constraints_hyper))],
                                                       inc=params['boosting_mapping'])
+                wandb_num_constraints = len(constraints_hyper)
             else:
                 score, new_w = loss_maxcut_numpy_boost(res, constraints, [1 for i in range(len(constraints))], inc=params['boosting_mapping'])
                 score_th, _ =  loss_maxcut_numpy_boost(res_th, constraints, [1 for i in range(len(constraints))], inc=params['boosting_mapping'])
+                wandb_num_constraints = len(constraints)
 
         elif params['mode'] == 'maxind':
             if params["coarsen"]:
@@ -303,6 +322,25 @@ def centralized_solver(constraints, header, params, file_name):
 
             score = [score_im, score_cut]
             score_th = [score_th_im, score_th_cut]
+
+        ##### W&B: res_th/score_th is the GNN's thresholded output before SA #####
+        ##### (pre_refinement); res/score is after SA runs to convergence #####
+        ##### (post_refinement) - see wandb_tracking_spec.md Section 8. #####
+        if wandb_enabled:
+            quality_raw, feasible_raw = quality_from_score(wandb_problem_type, score_th, wandb_num_constraints)
+            quality_refined, feasible_refined = quality_from_score(wandb_problem_type, score, wandb_num_constraints)
+            run_logger = RunLogger(
+                problem_type=wandb_problem_type,
+                instance_id=wandb_instance_id,
+                instance_size=header['num_nodes'],
+                difficulty_param=params.get('difficulty_param', 'n/a'),
+                seed=i,
+                time_budget_s=params.get('time_budget_s'),
+                project=params.get('wandb_project'),
+            )
+            run_logger.log_phase_end('pre_refinement', train_time, quality_raw, feasible_raw)
+            run_logger.log_phase_end('post_refinement', map_time, quality_refined, feasible_refined)
+            run_logger.finish()
 
         ##### collect the results for each k #####
         probs.append(prob)

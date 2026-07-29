@@ -61,6 +61,24 @@ Set the config file in configs directory and run "run.py" with the specified con
 	- initial_transfer: false/true (true for initializing the models with a pre-trained model)
 	
 
+#### W&B Tracking
+
+Only wired up for `mode: maxcut`/`QUBO_maxcut`/`maxcut_annea` and `mode: sat`, per the shared
+cross-method evaluation schema (see `wandb_tracking_spec.md`). Disabled by default; other modes
+are unaffected.
+
+    - wandb_enabled: false/true; false default. When true, requires WANDB_API_KEY and
+      BENCHMARK_ROOT to be set in the environment (fails fast with a clear error otherwise).
+    - wandb_project: W&B project name (shared across all methods in the study)
+    - difficulty_param: the difficulty axis value for this instance folder (e.g. density for
+      MaxCut, alpha for MaxSAT); "n/a" if not applicable
+    - time_budget_s: optional, only set when this run is capped to a fixed wall-clock budget
+
+For each of the `K` runs, `res_th`/`score_th` (GNN output thresholded at 0.5, before simulated
+annealing) is logged as the `pre_refinement` phase, and `res`/`score` (after SA runs to
+convergence) is logged as `post_refinement`. Each of the `K` runs is now seeded with `random.seed(i)`
+/ `np.random.seed(i)` / `torch.manual_seed(i)` so it is reproducible and loggable as `seed`.
+
 #### Sampling Parameters: for black-box ADANS optimization
 
     - K: 1 default: number of optimization rounds

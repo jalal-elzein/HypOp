@@ -47,5 +47,9 @@
 
     "multi_gpu": 0,
     "num_gpus": 1,
-    "test_multi_gpu": 0
+    "test_multi_gpu": 0,
+
+    "wandb_enabled": false,
+    "wandb_project": "hypergraph-csp-eval",
+    "difficulty_param": "n/a"
 }
