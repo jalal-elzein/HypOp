@@ -83,7 +83,7 @@ def _generate_G_from_H(H, variable_weight=False):
     #Adjacency matrix of the graph with self loop
     A = get_adj(H, n_node, n_edge)
     DA=np.sum(A, axis=1)
-    invDA = np.mat(np.diag(np.power(DA, -0.5)))
+    invDA = np.asmatrix(np.diag(np.power(DA, -0.5)))
 
     Ga=invDA @ A @ invDA
 
@@ -95,14 +95,14 @@ def _generate_G_from_H(H, variable_weight=False):
     # the degree of the hyperedge
     DE = np.sum(H, axis=0)
     DEm = DE-1
-    inDEm = np.mat(np.diag(np.power(DEm, -1)))
+    inDEm = np.asmatrix(np.diag(np.power(DEm, -1)))
     inDEm = np.nan_to_num(inDEm, 0)
-    invDE = np.mat(np.diag(np.power(DE, -1)))
+    invDE = np.asmatrix(np.diag(np.power(DE, -1)))
 
 
-    DV2 = np.mat(np.diag(np.power(DV, -0.5)))
-    W = np.mat(np.diag(W))
-    H = np.mat(H)
+    DV2 = np.asmatrix(np.diag(np.power(DV, -0.5)))
+    W = np.asmatrix(np.diag(W))
+    H = np.asmatrix(H)
     HT = H.T
 
 
