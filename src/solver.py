@@ -37,13 +37,23 @@ def centralized_solver(constraints, header, params, file_name):
         n_org=header['num_nodes']
         n=new_header['num_nodes']
         ##### q_torch helps with calculating the Maxcut and MIS loss faster ####
-        q_torch = gen_q_mis(constraints, n_org, 2, torch_dtype=None, torch_device=None)
+        ##### (only meaningful for mode='QUBO': gen_q_mis assumes non-negative #####
+        ##### graph/MIS-style edges, which SAT clauses with negated literals   #####
+        ##### are not - only compute it when it's actually going to be used)  #####
+        if params['mode'] == 'QUBO':
+            q_torch = gen_q_mis(constraints, n_org, 2, torch_dtype=None, torch_device=None)
+        else:
+            q_torch = None
     else:
         graph_dict = {}
         new_header, new_constraints = header, constraints
         n = header['num_nodes']
         ##### q_torch helps with calculating the Maxcut and MIS loss faster ####
-        q_torch = gen_q_mis(constraints, n, 2, torch_dtype=None, torch_device=None)
+        ##### (only meaningful for mode='QUBO', see comment above) #####
+        if params['mode'] == 'QUBO':
+            q_torch = gen_q_mis(constraints, n, 2, torch_dtype=None, torch_device=None)
+        else:
+            q_torch = None
 
     # if params['data'] != 'hypergraph' and  params['data'] != 'task' and params['data'] != 'uf' and params['data'] != 'NDC':
 

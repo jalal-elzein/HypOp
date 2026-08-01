@@ -41,6 +41,9 @@
     "penalty_inc": false,
     "penalty_c": 1e-5,
 
+    "sparcify": false,
+    "sparcify_p": 0.8,
+    "n_partitions": 4,
 
     "multi_gpu": 0,
     "num_gpus": 1,

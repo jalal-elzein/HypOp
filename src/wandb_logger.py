@@ -80,7 +80,7 @@ class RunLogger:
         instance_size,
         difficulty_param,
         seed,
-        condition="default",
+        condition="n/a",
         pretrain_scale="n/a",
         time_budget_s=None,
         project=None,

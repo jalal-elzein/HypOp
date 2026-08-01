@@ -37,12 +37,13 @@
     "patience": 50,
     "sparsify": false,
     "sparsify_p": 0.8,
+    "load_best_out": false,
     "penalty_inc": false,
     "penalty_c": 1e-5,
     "n_partitions": 4,
     "sparcify": false,
     "sparcify_p": 0.8,
-    "coarsen": true,
+    "coarsen": false,
 
 
     "multi_gpu": 0,
