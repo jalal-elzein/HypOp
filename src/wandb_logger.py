@@ -96,7 +96,7 @@ class RunLogger:
 
         self._wandb = wandb
         self.run = wandb.init(
-            project=project or os.environ.get("WANDB_PROJECT", "hypergraph-csp-eval"),
+            project=project or os.environ.get("WANDB_PROJECT", "MS3HN2-Evaluation"),
             config={
                 "method": method,
                 "problem_type": problem_type,

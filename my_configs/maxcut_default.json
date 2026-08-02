@@ -52,6 +52,6 @@
     "test_multi_gpu": 0,
 
     "wandb_enabled": false,
-    "wandb_project": "hypergraph-csp-eval",
+    "wandb_project": "MS3HN2-Evaluation",
     "difficulty_param": "n/a"
 }
