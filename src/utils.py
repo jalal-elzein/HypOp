@@ -83,7 +83,13 @@ def _generate_G_from_H(H, variable_weight=False):
     #Adjacency matrix of the graph with self loop
     A = get_adj(H, n_node, n_edge)
     DA=np.sum(A, axis=1)
-    invDA = np.asmatrix(np.diag(np.power(DA, -0.5)))
+    ##### nodes with no hyperedges at all (degree 0, e.g. an unused SAT variable) #####
+    ##### give power(0, -0.5) == inf; without zeroing that out, inf * 0 == NaN     #####
+    ##### poisons that node's whole row/column and the loss never recovers.       #####
+    with np.errstate(divide='ignore'):
+        invDA_diag = np.power(DA, -0.5)
+    invDA_diag = np.nan_to_num(invDA_diag, nan=0.0, posinf=0.0, neginf=0.0)
+    invDA = np.asmatrix(np.diag(invDA_diag))
 
     Ga=invDA @ A @ invDA
 
@@ -100,7 +106,10 @@ def _generate_G_from_H(H, variable_weight=False):
     invDE = np.asmatrix(np.diag(np.power(DE, -1)))
 
 
-    DV2 = np.asmatrix(np.diag(np.power(DV, -0.5)))
+    with np.errstate(divide='ignore'):
+        DV2_diag = np.power(DV, -0.5)
+    DV2_diag = np.nan_to_num(DV2_diag, nan=0.0, posinf=0.0, neginf=0.0)
+    DV2 = np.asmatrix(np.diag(DV2_diag))
     W = np.asmatrix(np.diag(W))
     H = np.asmatrix(H)
     HT = H.T

@@ -25,12 +25,30 @@ from src.wandb_logger import RunLogger, PROBLEM_TYPE_BY_MODE, compute_instance_i
 
 
 
+def _normalize_node_ids(constraints, is_task=False):
+    """The rest of this module assumes 1-indexed node ids (info dicts keyed
+    1..n, `edges = [...abs(x) - 1...]`, etc). Some instance generators emit
+    0-indexed ids instead; detect that from the data itself and shift so
+    downstream code always sees 1..n, regardless of which convention the
+    source file used."""
+    node_slice = (lambda edge: edge[:-1]) if is_task else (lambda edge: edge)
+    ids = [abs(x) for edge in constraints for x in node_slice(edge)]
+    if not ids or min(ids) != 0:
+        return constraints
+    shifted = []
+    for edge in constraints:
+        nodes = node_slice(edge)
+        new_nodes = [x + 1 if x >= 0 else x - 1 for x in nodes]
+        shifted.append(new_nodes + edge[len(nodes):])
+    return shifted
+
+
 #### main solver ####
 def centralized_solver(constraints, header, params, file_name):
 
     temp_time = timeit.default_timer()
 
-
+    constraints = _normalize_node_ids(constraints, is_task=(params['data'] == 'task'))
 
     if params['coarsen']:
         new_header, new_constraints, graph_dict = coarsen5(constraints, header)
@@ -69,10 +87,12 @@ def centralized_solver(constraints, header, params, file_name):
     if params['data'] == 'bipartite':
         path = params['folder_path_hyper'] + file_name[:-14]+'.txt'
         constraints_hyper, header_hyper = read_hypergraph(path)
+        constraints_hyper = _normalize_node_ids(constraints_hyper)
         n_hyper=header_hyper['num_nodes']
     elif params['data'] == 'cliquegraph':
         path = params['folder_path_hyper'] + file_name[:-10] + '.txt'
         constraints_hyper, header_hyper = read_hypergraph(path)
+        constraints_hyper = _normalize_node_ids(constraints_hyper)
         n_hyper = header_hyper['num_nodes']
 
     if params['coarsen']:
